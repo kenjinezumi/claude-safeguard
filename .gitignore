@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+/runtime/
+/Workbooks/
+/Approved-Data/
+/Launcher-Backups/
+/approved-folder.json
+/sharepoint-settings.json
+/.mcp.json
+/.claude/

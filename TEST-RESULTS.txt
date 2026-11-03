@@ -1,0 +1,94 @@
+v0.7.1 synthetic audit; Linux / Python 3.12 / PowerShell 7.4.6
+No live Claude session or Microsoft tenant. See VALIDATION.txt.
+
+test_disabled_hooks_refuse_migration_without_write (test_configuration.ConfigurationTests.test_disabled_hooks_refuse_migration_without_write) ... ok
+test_duplicate_keys_refused (test_configuration.ConfigurationTests.test_duplicate_keys_refused) ... ok
+test_fresh_json_no_bom_and_blocking_exec_hooks (test_configuration.ConfigurationTests.test_fresh_json_no_bom_and_blocking_exec_hooks) ... ok
+test_migrate_bom_old_hooks_preserve_unrelated_and_repeat (test_configuration.ConfigurationTests.test_migrate_bom_old_hooks_preserve_unrelated_and_repeat) ... ok
+test_missing_hook_refuses_check (test_configuration.ConfigurationTests.test_missing_hook_refuses_check) ... ok
+test_browse_nested_import_leaves_source_unchanged (test_folders.FolderTests.test_browse_nested_import_leaves_source_unchanged) ... ok
+test_escape_absolute_and_network_paths_refused (test_folders.FolderTests.test_escape_absolute_and_network_paths_refused) ... ok
+test_linked_source_refused (test_folders.FolderTests.test_linked_source_refused) ... ok
+test_sensitive_name_withheld (test_folders.FolderTests.test_sensitive_name_withheld) ... ok
+test_sensitive_workbook_not_retained (test_folders.FolderTests.test_sensitive_workbook_not_retained) ... ok
+test_binary_nul (test_guard.GuardTests.test_binary_nul) ... ok
+test_directory (test_guard.GuardTests.test_directory) ... ok
+test_docx_hidden_extension (test_guard.GuardTests.test_docx_hidden_extension) ... ok
+test_invalid_utf8 (test_guard.GuardTests.test_invalid_utf8) ... ok
+test_local_block_same_check (test_guard.GuardTests.test_local_block_same_check) ... ok
+test_local_pass (test_guard.GuardTests.test_local_pass) ... ok
+test_malformed_payload_has_safe_code (test_guard.GuardTests.test_malformed_payload_has_safe_code) ... ok
+test_mcp_still_permitted (test_guard.GuardTests.test_mcp_still_permitted) ... ok
+test_missing_file (test_guard.GuardTests.test_missing_file) ... ok
+test_missing_nested_folder (test_guard.GuardTests.test_missing_nested_folder) ... ok
+test_missing_policy (test_guard.GuardTests.test_missing_policy) ... ok
+test_oversized (test_guard.GuardTests.test_oversized) ... ok
+test_policy_label_still_blocked (test_guard.GuardTests.test_policy_label_still_blocked) ... ok
+test_prompt_block_suppresses_original (test_guard.GuardTests.test_prompt_block_suppresses_original) ... ok
+test_relative_nested_path (test_guard.GuardTests.test_relative_nested_path) ... ok
+test_sensitive_data_never_echoed (test_guard.GuardTests.test_sensitive_data_never_echoed) ... ok
+test_shell_blocked (test_guard.GuardTests.test_shell_blocked) ... ok
+test_sibling_prefix (test_guard.GuardTests.test_sibling_prefix) ... ok
+test_symlink (test_guard.GuardTests.test_symlink) ... ok
+test_traversal (test_guard.GuardTests.test_traversal) ... ok
+test_utf16 (test_guard.GuardTests.test_utf16) ... ok
+test_utf8_bom (test_guard.GuardTests.test_utf8_bom) ... ok
+test_utf8_unicode_path_and_content (test_guard.GuardTests.test_utf8_unicode_path_and_content) ... ok
+test_valid_text_with_spaces (test_guard.GuardTests.test_valid_text_with_spaces) ... ok
+test_wrong_folder (test_guard.GuardTests.test_wrong_folder) ... ok
+test_alias_not_treated_as_installation (test_launcher.LauncherTests.test_alias_not_treated_as_installation) ... ok
+test_all_powershell_parses (test_launcher.LauncherTests.test_all_powershell_parses) ... ok
+test_bad_version_check_stops_setup (test_launcher.LauncherTests.test_bad_version_check_stops_setup) ... ok
+test_incomplete_installation_unchanged (test_launcher.LauncherTests.test_incomplete_installation_unchanged) ... ok
+test_install_routes_existing_to_repair (test_launcher.LauncherTests.test_install_routes_existing_to_repair) ... ok
+test_launch_cwd_arguments_and_spaces (test_launcher.LauncherTests.test_launch_cwd_arguments_and_spaces) ... ok
+test_missing_binary_has_repair_message (test_launcher.LauncherTests.test_missing_binary_has_repair_message) ... ok
+test_missing_guard_refuses_launch (test_launcher.LauncherTests.test_missing_guard_refuses_launch) ... ok
+test_native_failure_reported (test_launcher.LauncherTests.test_native_failure_reported) ... ok
+test_native_found_without_path_and_preferred_over_alias (test_launcher.LauncherTests.test_native_found_without_path_and_preferred_over_alias) ... ok
+test_old_claude_version_refuses_launch (test_launcher.LauncherTests.test_old_claude_version_refuses_launch) ... ok
+test_path_fallback (test_launcher.LauncherTests.test_path_fallback) ... ok
+test_repair_preserves_data_and_backs_up_launcher (test_launcher.LauncherTests.test_repair_preserves_data_and_backs_up_launcher) ... ok
+test_repair_rolls_back_when_shortcut_fails (test_launcher.LauncherTests.test_repair_rolls_back_when_shortcut_fails) ... ok
+test_unknown_claude_version_refuses_launch (test_launcher.LauncherTests.test_unknown_claude_version_refuses_launch) ... ok
+test_ancestor_loop_refused (test_sharepoint.SharePointTests.test_ancestor_loop_refused) ... ok
+test_changed_source_not_saved (test_sharepoint.SharePointTests.test_changed_source_not_saved) ... ok
+test_config_rejects_missing_or_extra_credentials (test_sharepoint.SharePointTests.test_config_rejects_missing_or_extra_credentials) ... ok
+test_cross_drive_and_remote_item_refused (test_sharepoint.SharePointTests.test_cross_drive_and_remote_item_refused) ... ok
+test_direct_url_and_browser_url (test_sharepoint.SharePointTests.test_direct_url_and_browser_url) ... ok
+test_docx_conversion_and_real_guard (test_sharepoint.SharePointTests.test_docx_conversion_and_real_guard) ... ok
+test_download_error_cleans_raw_temp (test_sharepoint.SharePointTests.test_download_error_cleans_raw_temp) ... ok
+test_download_never_forwards_token (test_sharepoint.SharePointTests.test_download_never_forwards_token) ... ok
+test_error_never_contains_graph_body_or_token (test_sharepoint.SharePointTests.test_error_never_contains_graph_body_or_token) ... ok
+test_external_nextlink_rejected (test_sharepoint.SharePointTests.test_external_nextlink_rejected) ... ok
+test_guard_failure_removes_prepared_copy (test_sharepoint.SharePointTests.test_guard_failure_removes_prepared_copy) ... ok
+test_listing_scans_names (test_sharepoint.SharePointTests.test_listing_scans_names) ... ok
+test_opaque_link_rejected (test_sharepoint.SharePointTests.test_opaque_link_rejected) ... ok
+test_pagination_opaque_and_bound_to_path (test_sharepoint.SharePointTests.test_pagination_opaque_and_bound_to_path) ... ok
+test_redirect_to_other_host_blocked_before_request (test_sharepoint.SharePointTests.test_redirect_to_other_host_blocked_before_request) ... ok
+test_resolve_proves_ancestry (test_sharepoint.SharePointTests.test_resolve_proves_ancestry) ... ok
+test_sensitive_text_not_imported (test_sharepoint.SharePointTests.test_sensitive_text_not_imported) ... ok
+test_sensitive_workbook_removed (test_sharepoint.SharePointTests.test_sensitive_workbook_removed) ... ok
+test_size_limit_before_download (test_sharepoint.SharePointTests.test_size_limit_before_download) ... ok
+test_stream_limit_without_content_length (test_sharepoint.SharePointTests.test_stream_limit_without_content_length) ... ok
+test_traversal_and_absolute_paths_rejected (test_sharepoint.SharePointTests.test_traversal_and_absolute_paths_rejected) ... ok
+test_unconfigured_returns_actionable_error (test_sharepoint.SharePointTests.test_unconfigured_returns_actionable_error) ... ok
+test_unsupported_extension_before_download (test_sharepoint.SharePointTests.test_unsupported_extension_before_download) ... ok
+test_url_wrong_host_scheme_or_root_rejected (test_sharepoint.SharePointTests.test_url_wrong_host_scheme_or_root_rejected) ... ok
+test_workbook_import_real_scanner (test_sharepoint.SharePointTests.test_workbook_import_real_scanner) ... ok
+test_mcp_initialize_list_create_dashboard_and_refusal (test_workflows.ProtocolTests.test_mcp_initialize_list_create_dashboard_and_refusal) ... Processing request of type ListToolsRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+ok
+test_clean_join_aggregate_chart_filter_sort_append (test_workflows.WorkflowTests.test_clean_join_aggregate_chart_filter_sort_append) ... ok
+test_dashboard_template_across_files_and_original_preservation (test_workflows.WorkflowTests.test_dashboard_template_across_files_and_original_preservation) ... ok
+test_external_formula_refused_on_create_and_import (test_workflows.WorkflowTests.test_external_formula_refused_on_create_and_import) ... ok
+test_fill_stops_atomically_on_second_invalid_mapping (test_workflows.WorkflowTests.test_fill_stops_atomically_on_second_invalid_mapping) ... ok
+test_many_to_many_join_refused (test_workflows.WorkflowTests.test_many_to_many_join_refused) ... ok
+test_missing_category_amount_mixed_currency_and_precision_refused (test_workflows.WorkflowTests.test_missing_category_amount_mixed_currency_and_precision_refused) ... ok
+
+----------------------------------------------------------------------
+Ran 82 tests in 21.512s
+
+OK

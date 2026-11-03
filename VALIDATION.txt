@@ -1,0 +1,100 @@
+claude-safeguard v0.7.1 — validation record, 2026-11-03
+
+VERDICT
+Automated checks pass. The package is ready for a supervised synthetic Windows
+pilot, not a claim of complete Windows/SharePoint compatibility or PII prevention.
+No real organisational files, Microsoft account or tenant credentials were used.
+
+EXECUTED HERE
+Environment: Linux x86_64, Python 3.12, portable PowerShell 7.4.6.
+Direct dependencies: mcp 1.30.0, openpyxl 3.1.5, pandas 3.1.0, pypdf 6.21.4;
+optional imports msal 1.39.0, msal-extensions 1.3.1, requests 2.34.2.
+pip check: no broken requirements found.
+82 unittest tests passed; test summary is included in TEST-RESULTS.txt.
+
+- 5 settings tests: BOM-free JSON, old hook migration, unrelated keys retained,
+  repeat migration, required hook checks, disabled hooks and duplicate keys refused.
+- 5 folder tests: nested browsing/import, source preservation, escapes and links
+  refused, identifying names withheld, sensitive workbook copy removed.
+- 25 actual PowerShell guard tests: allowed reads, Unicode/spaces, relative paths,
+  missing files, folders, path escape, links, format/encoding/size, sensitive data,
+  fixed diagnostics, prompt suppression output, denied shells and permitted MCP.
+- 15 launcher/repair tests: path lookup, spaces, version failures, minimum version,
+  missing binary/files, existing-install repair routing, file backup/rollback and
+  preserved synthetic data. Unix executable fixtures are used. Dependency,
+  configuration and COM shortcut helpers are mocked in these particular tests.
+- 25 SharePoint tests with simulated Graph HTTP: scoped URLs/ancestry, cross-drive
+  and linked-item refusal, pagination, sensitive names, download token separation,
+  redirect rejection, size/eTag changes, cleanup, error redaction, unsupported
+  formats, actual XLSX scanning and actual DOCX extraction plus PowerShell guard.
+- 7 workflow tests: REAL MCP stdio initialize/tools-list/call, create/dashboard/
+  sensitive-pattern refusal; multi-file finance dashboard and template results;
+  atomic mapping failure; empty/missing/mixed-currency/precision rejection;
+  cleaning/join/group/chart/filter/sort/append; external formula and many-to-many
+  join refusal. Original source bytes remain unchanged.
+
+CONFIRMED DEFECTS CORRECTED
+Fresh unpinned installation selected MCP 2.3.0; importing mcp.server.fastmcp raised
+ModuleNotFoundError. Pinning to tested MCP 1.30.0 restores the server API.
+Installer and repair now install tested core dependencies and run the real
+synthetic protocol check before reporting success. Optional sign-in packages
+are pinned separately and import-checked by Connect-SharePoint.cmd.
+
+Previous settings lacked onFailure=block. Anthropic documents non-blocking
+failures/timeouts by default for these events. Required prompt/tool hooks now
+block on failure, and the launcher requires the documented minimum v2.1.295.
+Exec-form arguments avoid shell parsing of Windows paths. Windows PowerShell
+5.1's Set-Content UTF8 produces a BOM; Python now writes these JSON files without
+one, and repair migrates existing BOM files with backups.
+
+Additional corrections: bounded workbook reads, Windows reparse checks, import
+cleanup after subprocess failure, missing dashboard categories/empty data,
+consistent external-formula screening, and explicit many-to-many join refusal.
+
+NOT EXECUTED / NO CLAIM OF PASS
+- Fresh installation on Windows 10/11, Python 3.13 setup through WinGet, locked-down
+  enterprise devices, antivirus/SmartScreen/proxy behaviour, ARM64 or offline use.
+- Windows PowerShell 5.1, Forms pickers, COM shortcuts, Unicode profiles on Windows.
+- Live Claude trust prompts, project hook activation, tool-name mapping, failure/
+  timeout handling, global or managed settings interactions, resumed sessions.
+- Microsoft OAuth browser sign-in, Windows DPAPI persistence, token refresh,
+  Sites.Selected grants, Conditional Access or actual tenant download redirects.
+- Excel opening/recalculation, visual chart fidelity and advanced workbook features.
+- Comprehensive sensitive-data detection, hostile local users or complete sandboxing.
+Passing simulated transport tests does not prove that a tenant will grant access.
+
+WINDOWS ACCEPTANCE RUN — BEFORE STAFF ROLLOUT
+1. Use a clean supported Windows account and the organisation-approved Claude
+   account. Extract the ZIP and run Install.cmd. Do not delete existing user data.
+2. Run Test-Installation.cmd. It uses the installed Python for the installed MCP
+   smoke check and package offline tests. Platform-specific skips are shown.
+   This check does not send anything to Claude or Microsoft. Setup/repair downloads
+   and Claude --version are separate operations. Capture failure codes only.
+3. Open the desktop shortcut. Verify /hooks and /mcp, accept only the package's
+   trusted workspace/local server. Run the synthetic dashboard/template examples
+   in START-HERE.txt. Check exact totals, styles/formulas and charts in Excel.
+4. Verify allowed TXT reads, missing-file diagnostics, synthetic email refusal,
+   and shell/unapproved-path refusal in that live session.
+5. IT: use an isolated COPY with synthetic data to force a PreToolUse and
+   UserPromptSubmit hook failure (missing script), then timeout. Verify Claude
+   blocks the call/prompt. Restore the copy. Do not disable the production hooks.
+6. IT: finish SHAREPOINT-SETUP.txt and provide settings. Staff run
+   Connect-SharePoint.cmd, sign in, browse the configured source and import an
+   approved synthetic policy and XLSX. Confirm out-of-scope access is refused,
+   no remote file is edited, expired login requests sign-in, and results open.
+7. Run Repair.cmd on a synthetic existing installation, then Test-Installation.cmd
+   and a fresh Claude session. Verify old workbooks/folder selection are retained.
+Record Windows, Claude and Python versions and the pass/fail result for each step.
+A failure here means the package is not yet approved for staff rollout.
+
+REPRODUCE AUTOMATED CHECKS
+Windows staff: double-click Test-Installation.cmd after installing or repairing.
+Developers: python -m unittest discover -s tests -v
+Set SAFEGUARD_TEST_PWSH to an available PowerShell binary for guard tests.
+The Unix launcher fixtures skip Windows; they do not claim to test Windows COM.
+The runtime smoke test is: python runtime_check.py
+
+REFERENCES
+https://code.claude.com/docs/en/hooks
+https://code.claude.com/docs/en/setup
+https://github.com/modelcontextprotocol/python-sdk

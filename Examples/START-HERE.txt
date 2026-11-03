@@ -1,0 +1,9 @@
+All files here contain synthetic data.
+Install the pilot. Import Synthetic-Financial-Data.xlsx and Synthetic-Template.xlsx.
+Ask Claude to list and inspect workbooks. Then request a GBP budget-versus-actual
+dashboard grouped by Department using Budget, Actual and Currency columns.
+For template filling, match Report column A to Department in Actuals; fill B2/B3
+with summed Actual values. Leave C2 formula untouched.
+Expected dashboard: budget 3500, actual 3300, variance -200.
+Expected filled template: B2 1500; B3 1800; C2 remains =B2.
+Example outputs are supplied for comparison; do not describe them as a live Claude test.

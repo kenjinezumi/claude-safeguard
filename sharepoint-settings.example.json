@@ -1,0 +1,7 @@
+{
+  "tenant_id": "REPLACE-WITH-TENANT-GUID",
+  "client_id": "REPLACE-WITH-APP-CLIENT-GUID",
+  "hostname": "yourtenant.sharepoint.com",
+  "drive_id": "REPLACE-WITH-LIBRARY-DRIVE-ID",
+  "root_item_id": "REPLACE-WITH-APPROVED-FOLDER-ITEM-ID"
+}

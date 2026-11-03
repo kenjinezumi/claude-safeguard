@@ -1,0 +1,142 @@
+claude-safeguard v0.7 - SHAREPOINT SETUP
+
+WHAT STAFF DO
+1. Close Claude, extract the new package and run Install.cmd (or Repair.cmd).
+2. Ask IT for the completed sharepoint-settings.json file described below.
+3. Double-click Connect-SharePoint.cmd in the extracted package. Select the settings
+   file when prompted and confirm that the configured source is approved for Claude.
+4. Sign in to your work account in the Microsoft browser window. Passwords/MFA stay
+   with Microsoft. Follow company policies; if access is denied, ask IT.
+5. Start a fresh claude-safeguard session. Check /mcp, then ask:
+     Check my SharePoint connection and browse the approved SharePoint folder.
+     Import the policy file at the exact path returned, then summarise it.
+     Import the monthly XLSX files from that folder and build a budget dashboard.
+No manual downloads are required for supported files after connection.
+If sign-in expires, run Connect-SharePoint.cmd again with saved settings.
+Disconnect-SharePoint.cmd removes the local cached account. Close Claude first.
+Previously imported/output files remain and must be managed separately.
+
+ONE-TIME MICROSOFT 365 ADMINISTRATOR SETUP
+This is a local public-client integration, not a hosted service. There is no server,
+paid Azure resource or client secret to deploy. A Microsoft Entra app registration
+and SharePoint resource grant ARE required; the package cannot grant itself access.
+Use your normal administrative process. Do not distribute an administrator token.
+
+A. Register a SINGLE-TENANT application for your organisation in Microsoft Entra ID.
+   Name it claude-safeguard. Record Directory (tenant) ID and Application (client) ID.
+   Add the Mobile and desktop applications platform with redirect URI:
+     http://localhost
+   The local MSAL browser sign-in uses authorization code + PKCE and a temporary
+   loopback callback. No public web service is hosted. Do not create a client secret.
+
+B. Add Microsoft Graph DELEGATED permission Sites.Selected. Follow tenant policy for
+   consent; IT can grant consent centrally. This runtime requests only that Graph
+   scope, with standard MSAL identity/refresh scopes. Do not add broad Files.Read.All,
+   Sites.Read.All, write scopes or application-only permissions to this client.
+   The employee must independently have access to the selected SharePoint content.
+
+C. Using a SEPARATE authorised admin tool/identity, grant the app the read role on
+   the approved site. Consent alone gives Selected applications no site access.
+   An administrator with the appropriate Graph permission can use:
+     POST https://graph.microsoft.com/v1.0/sites/{site-id}/permissions
+     {
+       "roles": ["read"],
+       "grantedToIdentities": [{
+         "application": {"id": "APPLICATION-CLIENT-ID", "displayName": "claude-safeguard"}
+       }]
+     }
+   Microsoft documents Sites.FullControl.All for managing site grants. That is an
+   ADMIN TOOL permission, not a permission for claude-safeguard. Never put an admin
+   credential in the staff package. Verify the resulting grant and its read role.
+   Removing this site permission or revoking consent disables future API access.
+
+D. Identify the approved document library and starting folder using an authorised
+   admin Graph tool. Typical lookup routes are:
+     GET /sites/{hostname}:/sites/{site-path}
+     GET /sites/{site-id}/drives
+     GET /drives/{drive-id}/root
+     GET /drives/{drive-id}/root:/{path-to-approved-folder}
+   The folder item's id becomes root_item_id. Prefer a folder dedicated to approved
+   AI working material. Record the drive id, not the library display name/list id.
+   The app's Microsoft permission covers the selected site; this package further
+   restricts operations to the configured drive/folder. The folder restriction is
+   local and user-removable, not an administrator-enforced Microsoft boundary.
+
+E. Fill in sharepoint-settings.example.json and save as sharepoint-settings.json:
+     tenant_id: Directory GUID
+     client_id: Application GUID
+     hostname: exact tenant hostname, e.g. example.sharepoint.com
+     drive_id: the document library drive ID
+     root_item_id: approved starting folder item ID (or library root item ID)
+   These are identifiers, not secrets. The file must contain exactly those five
+   fields. Distribute it through your usual internal channel. Each user selects
+   this file in Connect-SharePoint.cmd; no user edits to Python/PowerShell are needed.
+   Do not publish your organisation's populated configuration in a public repository.
+
+F. Pilot with synthetic documents first. Confirm the account can browse the allowed
+   root, import an ordinary TXT/DOCX/PDF and XLSX, and cannot import outside that root.
+   Confirm policy/PII blocks, URL handling, expired sign-in, Conditional Access and
+   error messages on your Windows machines before staff rollout.
+   No live Microsoft tenant or Windows OAuth session was available during development.
+
+BEHAVIOUR AND DATA FLOW
+Staff Microsoft sign-in -> Microsoft Graph -> local temporary download -> local
+extraction/scanning -> local workbook or prepared text -> Claude tool/Read response.
+The local SharePoint adapter makes only GET requests to Graph and downloads; it
+cannot upload, edit, delete, share, alter permissions or execute downloaded content.
+Authentication itself uses Microsoft's standard OAuth requests through MSAL.
+Approved filenames shown by browsing and imported content read by Claude can reach
+Anthropic. Passing a regex scan is not proof of anonymisation. Configure only content
+already approved for AI use. Downloading a file locally does not classify it for you.
+Remote files stay unchanged. Dashboard/template outputs are local workbooks; sharing
+results back to SharePoint is a separate, manual action after review.
+
+Credentials are cached outside the Claude project at:
+  %LOCALAPPDATA%\claude-safeguard-auth
+Windows DPAPI encrypts the MSAL token cache, with MSAL Extensions file locking. There
+is no plaintext fallback. The model has no tool operation to read this cache, change
+configuration or initiate sign-in. This does not defend against malware or another
+process running as the same Windows user. No authentication tokens or raw Graph error
+bodies are returned to Claude. Do not share caches, diagnostic dumps or auth URLs.
+Raw downloads use that separate local folder and are normally deleted after import.
+Deletion is not secure erasure; crashes may leave temporary downloads for IT cleanup.
+
+SUPPORTED FILES AND LINKS
+XLSX imports retain the existing spreadsheet workflow. DOCX/PPTX/ODT/ODS/ODP, text
+PDFs and UTF-8 TXT/CSV/TSV/JSON/XML/HTML/MD/LOG become scanned text in Approved-Data.
+Limits: 25 MiB download; 1 MiB converted text; existing workbook/archive limits apply.
+Images, OCR, scanned-only PDFs, audio/video, legacy Office and encrypted files remain
+unsupported. Text extraction can omit images/layout. No macros/embedded code execute.
+Only ordinary document libraries are supported; no SharePoint lists/pages, OneNote,
+remote shortcuts, personal OneDrive, sovereign clouds or cross-tenant sharing.
+A direct document URL under the configured folder is accepted, including /:w:/r/
+forms and library view id= URLs. Opaque short sharing links, Doc.aspx/sourcedoc links
+and permission redemption are not supported. Use sharepoint_browse to locate those
+files by relative path instead. Paths containing literal %, ? or # are unsupported.
+Graph content redirects are restricted to the configured tenant SharePoint hostname;
+if Microsoft uses another download host, the operation stops for IT review.
+Browsing is paginated (up to 200 entries per response); follow the returned next_page.
+There is no tenant-wide search. Select a narrower root to reduce exposure.
+
+ERROR CODES
+SP-SETUP: settings/dependencies are missing or invalid; run Connect-SharePoint.cmd.
+SP-LOGIN: sign-in is needed; use Connect-SharePoint.cmd locally.
+SP-ACCESS: Microsoft denied access; IT checks consent, site read grant, user access,
+           sensitivity/download restrictions and Conditional Access. Do not bypass.
+SP-NOT-FOUND: use an exact path from browsing.
+SP-SCOPE / SP-LINK: outside approved source or unsupported URL/shortcut.
+SP-LIMIT / SP-TYPE: oversized or unsupported file.
+SP-CHANGED: file changed during download; wait until editing finishes and retry.
+SP-REVIEW: content/conversion failed local checks; review the original locally.
+SP-NETWORK: connectivity/throttling; retry later or ask IT.
+SP-CHECK: operation stopped unexpectedly; report the code without private content.
+
+PRIMARY REFERENCES
+https://learn.microsoft.com/en-us/graph/permissions-selected-overview
+https://learn.microsoft.com/en-us/graph/permissions-reference#sitesselected
+https://learn.microsoft.com/en-us/graph/api/site-post-permissions
+https://learn.microsoft.com/en-us/entra/msal/python/getting-started/acquiring-tokens
+https://learn.microsoft.com/en-us/python/api/msal/msal.application.publicclientapplication
+https://github.com/AzureAD/microsoft-authentication-extensions-for-python
+https://learn.microsoft.com/en-us/graph/api/driveitem-list-children
+https://learn.microsoft.com/en-us/graph/api/driveitem-get-content
